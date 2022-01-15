@@ -1,2 +1,2 @@
-# Hello-world
-First crack at GitHub community
+The programmer likes to dabble with HTML, CSS, JAVASCRIPT
+PHP, MySQL
