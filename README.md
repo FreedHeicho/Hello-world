@@ -1,2 +1,2 @@
-# Hello-world
-First crack at GitHub community
+Info about the coder behind the code
+
