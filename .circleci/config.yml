@@ -48,4 +48,6 @@ workflows:
       - give-emotion:
           requires:
             - say-hello
-      - say_my_name      
+      - say_my_name:
+          requires:
+            - give-emotion      
