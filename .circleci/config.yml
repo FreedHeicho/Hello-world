@@ -29,6 +29,16 @@ jobs:
       - run:
          name: "give emotion"
          command: "echo I am glad to be here"
+  say_my_name:
+    docker:
+      - image: :cimg/base:2021.11
+    steps:
+      - checkout
+      - run:
+         name: "Print out an environment variable of my name already in the project"
+         command: echo name_of_coder
+
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -38,3 +48,4 @@ workflows:
       - give-emotion:
           requires:
             - say-hello
+      - say_my_name      
