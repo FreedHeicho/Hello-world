@@ -26,8 +26,8 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      -checkout
-      -run:
+      - checkout
+      - run:
          name: "give emotion"
          command: "echo I am glad to be here"
 # Invoke jobs via workflows
@@ -38,4 +38,4 @@ workflows:
       - say-hello
       - give-emotion:
           requires:
-              -say-hello
+              - say-hello
