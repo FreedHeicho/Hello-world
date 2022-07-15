@@ -38,4 +38,4 @@ workflows:
       - say-hello
       - give-emotion:
           requires:
-              - say-hello
+            - say-hello
