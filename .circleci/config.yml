@@ -36,7 +36,7 @@ jobs:
       - checkout
       - run:
          name: "Print out an environment variable of my name already in the project"
-         command: echo name_of_coder
+         command: echo $name_of_coder
 
 
 # Invoke jobs via workflows
