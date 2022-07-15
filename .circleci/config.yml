@@ -31,7 +31,7 @@ jobs:
          command: "echo I am glad to be here"
   say_my_name:
     docker:
-      - image: :cimg/base:2021.11
+      - image: cimg/base:2021.11
     steps:
       - checkout
       - run:
