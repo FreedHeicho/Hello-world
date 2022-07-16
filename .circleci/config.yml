@@ -37,8 +37,25 @@ jobs:
       - run:
          name: "Print out an environment variable of my name already in the project"
          command: echo $name_of_coder
-
-
+  save_hello_world_output:
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run: echo "Hello, World!" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt      
+  print_output_file:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat ~/output.txt
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -50,4 +67,8 @@ workflows:
             - say-hello
       - say_my_name:
           requires:
-            - give-emotion      
+            - give-emotion
+      - save_hello_world_output       
+      - print_output_file:
+            requires:
+              - save_hello_world_output     
