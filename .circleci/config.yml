@@ -26,6 +26,11 @@ jobs:
       - run:
           name: "Say hello"
           command: echo "Hello, World! from " print_pipeline_id
+  my_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - print_pipeline_id  
   give-emotion:
   #use a docker executor and a lightweight image
     docker:
