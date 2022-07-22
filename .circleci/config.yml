@@ -20,34 +20,28 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
-  give-emotion:
-  #use a docker executor and a lightweight image
+  # Perform your first smoke test
+  smoke_test:
     docker:
-      - image: cimg/base:stable
+      - image: alpine:latest
     steps:
-      - checkout
+      - run: apk add --update curl
       - run:
-         name: "give emotion"
-         command: "echo I am glad to be here"
-  say_my_name:
-    docker:
-      - image: cimg/base:2021.11
-    steps:
-      - checkout
-      - run:
-         name: "Print out an environment variable of my name already in the project"
-         command: echo $name_of_coder
-
+          name: smoke test
+          command: |
+            URL="https://blog.udacity.com/"
+            # Test if website exists
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
-      - give-emotion:
-          requires:
-            - say-hello
-      - say_my_name:
-          requires:
-            - give-emotion      
+     # - say-hello
+      - smoke-test
