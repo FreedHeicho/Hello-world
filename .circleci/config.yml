@@ -2,6 +2,11 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 # use a package of configuration called an orb 
+commands:
+  print_pipeline_id:
+    description: "Print out the pipeline id"
+    steps:
+        - run: echo ${CIRCLE_WORKFLOW_ID}
 orbs:
     #Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
@@ -19,7 +24,12 @@ jobs:
       - checkout
       - run:
           name: "Say hello"
-          command: "echo Hello, World!"
+          command: echo "Hello, World! from " print_pipeline_id
+  my_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - print_pipeline_id  
   give-emotion:
   #use a docker executor and a lightweight image
     docker:
@@ -37,7 +47,35 @@ jobs:
       - run:
          name: "Print out an environment variable of my name already in the project"
          command: echo $name_of_coder
-
+  save_hello_world_output:
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run: echo "Hello, World!" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt      
+  print_output_file:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat ~/output.txt
+  failed_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: exit 1
+      - run:
+          name: on error
+          command: echo "Hello Error!"
+          when: on_fail
+   
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -50,4 +88,12 @@ workflows:
             - say-hello
       - say_my_name:
           requires:
-            - give-emotion      
+            - give-emotion
+      - save_hello_world_output       
+      - print_output_file:
+            requires:
+              - save_hello_world_output 
+      - my_job         
+      - failed_job:
+            requires:
+              - save_hello_world_output
